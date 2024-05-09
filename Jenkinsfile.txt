@@ -59,7 +59,7 @@ pipeline {
         success {
             // Send notification email upon successful completion
             emailext (
-                to: 'example@email.com',
+                to: 's223276417@deakin.edu.au',
                 subject: "Pipeline Status: SUCCESS",
                 body: "Pipeline completed successfully.",
                 attachmentsPattern: '**/*.log'
@@ -68,7 +68,7 @@ pipeline {
         failure {
             // Send notification email upon failure
             emailext (
-                to: 'example@email.com',
+                to: 's223276417@deakin.edu.au',
                 subject: "Pipeline Status: FAILURE",
                 body: "Pipeline failed. Please check logs for details.",
                 attachmentsPattern: '**/*.log'
