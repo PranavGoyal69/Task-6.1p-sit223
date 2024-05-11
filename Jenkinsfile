@@ -2,6 +2,13 @@ pipeline {
     agent any
     
     stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the code from the Git repository
+                git branch: 'main', url: 'https://github.com/PranavGoyal69/Task-6.1p-sit223.git'
+            }
+        }
+        
         stage('Build') {
             steps {
                 // Build the code using Maven
@@ -31,7 +38,7 @@ pipeline {
         stage('Security Scan') {
             steps {
                 // Perform security scan using OWASP ZAP
-                sh 'zap-full-scan.py -t http://example.com'
+                sh 'zap-full-scan.py -t http://your_application_url'
             }
         }
         
