@@ -4,35 +4,40 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                // Build the code using a build automation tool (e.g., Gradle)
-                sh 'gradle build'
+                // Build the code using Maven
+                sh 'mvn clean package'
             }
         }
         
         stage('Unit and Integration Tests') {
             steps {
-                // Run unit tests and integration tests
-                sh 'gradle test'
+                // Run unit tests using JUnit and integration tests using Selenium
+                sh 'mvn test'
             }
         }
         
         stage('Code Analysis') {
             steps {
-                // Run a code analysis tool (e.g., Checkstyle)
-                sh 'checkstyle ./src'
+                // Integrate SonarQube for code analysis
+                script {
+                    def scannerHome = tool 'SonarQubeScanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
             }
         }
         
         stage('Security Scan') {
             steps {
-                // Perform a security scan using a security scanning tool (e.g., SonarQube)
-                sh 'sonar-scanner'
+                // Perform security scan using OWASP ZAP
+                sh 'zap-full-scan.py -t http://example.com'
             }
         }
         
         stage('Deploy to Staging') {
             steps {
-                // Deploy application to staging server (e.g., using SSH)
+                // Deploy application to staging server (e.g., AWS EC2 instance)
                 sh 'ssh user@staging-server "deploy_script.sh"'
             }
         }
@@ -46,7 +51,7 @@ pipeline {
         
         stage('Deploy to Production') {
             steps {
-                // Deploy application to production server (e.g., using SSH)
+                // Deploy application to production server (e.g., AWS EC2 instance)
                 sh 'ssh user@production-server "deploy_script.sh"'
             }
         }
@@ -55,11 +60,21 @@ pipeline {
     post {
         success {
             // Send notification email upon successful completion
-            echo "Pipeline Status: SUCCESS"
+            emailext (
+                to: 'gpranav2901@gmail.com',
+                subject: "Pipeline Status: SUCCESS",
+                body: "Pipeline completed successfully.",
+                attachmentsPattern: '**/*.log'
+            )
         }
         failure {
             // Send notification email upon failure
-            echo "Pipeline Status: FAILURE"
+            emailext (
+                to: 'gpranav2901@gmail.com',
+                subject: "Pipeline Status: FAILURE",
+                body: "Pipeline failed. Please check logs for details.",
+                attachmentsPattern: '**/*.log'
+            )
         }
     }
 }
