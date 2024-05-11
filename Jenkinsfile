@@ -9,6 +9,7 @@ pipeline {
             }
         }
         
+        stages {
         stage('Build') {
             steps {
                 // Build the code using Maven
@@ -18,7 +19,7 @@ pipeline {
         
         stage('Unit and Integration Tests') {
             steps {
-                // Run unit tests using JUnit and integration tests using Selenium
+                // Run unit tests using JUnit and integration tests using a tool like Selenium
                 sh 'mvn test'
             }
         }
@@ -64,7 +65,7 @@ pipeline {
         }
     }
     
-   post {
+    post {
         success {
             // Send notification email upon successful completion
             emailext (
