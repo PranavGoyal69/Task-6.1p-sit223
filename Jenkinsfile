@@ -75,7 +75,7 @@ pipeline {
                 attachmentsPattern: '**/*.log'
             )
         }
-        failure {
+       failure {
             // Send notification email upon failure
             emailext (
                 to: 'gpranav2901@gmail.com',
