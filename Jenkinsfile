@@ -64,7 +64,7 @@ pipeline {
         }
     }
     
-    post {
+   post {
         success {
             // Send notification email upon successful completion
             emailext (
